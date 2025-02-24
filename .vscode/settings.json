@@ -56,5 +56,5 @@
         "temp/": true,
         "Temp/": true
     },
-    "dotnet.defaultSolution": "Assignment-2-Team-3.sln"
+    "dotnet.defaultSolution": "Prototype 4.sln"
 }

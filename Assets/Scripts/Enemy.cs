@@ -6,7 +6,7 @@ public class Enemy : MonoBehaviour
     private Rigidbody enemyRb;
     private GameObject player;
 
-//check check 1 2 3
+// check check 1 2 3
     void Start()
     {
         enemyRb = GetComponent<Rigidbody>();        
