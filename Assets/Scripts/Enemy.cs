@@ -6,7 +6,7 @@ public class Enemy : MonoBehaviour
     private Rigidbody enemyRb;
     private GameObject player;
 
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
+//check check 1 2 3
     void Start()
     {
         enemyRb = GetComponent<Rigidbody>();        
