@@ -26,7 +26,7 @@ public class EnemyX : MonoBehaviour
         enemyRb.AddForce(lookDirection * speed * Time.deltaTime);
 
         // Restrict the position of the enemy
-        
+        RestrictPosition();
     }
 
     public void SetSpeed(float newSpeed)
@@ -59,17 +59,25 @@ public class EnemyX : MonoBehaviour
 
     void RestrictPosition()
     {
-        // Define the boundary limits
-        float minX = -17.69f, maxX = 17.69f;
-        float minZ = -9.31f, maxZ = 29.22f;
-        float minY = -0.93f, maxY = 4f; // Optional Y limit to prevent falling
-
-        // Clamp the position within the defined boundaries
-        float clampedX = Mathf.Clamp(transform.position.x, minX, maxX);
-        float clampedZ = Mathf.Clamp(transform.position.z, minZ, maxZ);
-        float clampedY = Mathf.Clamp(transform.position.y, minY, maxY);
-
-        // Apply the clamped position
-        transform.position = new Vector3(clampedX, clampedY, clampedZ);
+        if (transform.position.x < -18f)
+        {
+            transform.position = new Vector3(-18f, transform.position.y, transform.position.z);
+            enemyRb.linearVelocity = Vector3.zero;
+        }
+        if (transform.position.x > 18f)
+        {
+            transform.position = new Vector3(18f, transform.position.y, transform.position.z);
+            enemyRb.linearVelocity = Vector3.zero;
+        }
+        if (transform.position.z < -9f)
+        {
+            transform.position = new Vector3(transform.position.x, transform.position.y, -9f);
+            enemyRb.linearVelocity = Vector3.zero;
+        }
+        if (transform.position.z > 29f)
+        {
+            transform.position = new Vector3(transform.position.x, transform.position.y, 29f);
+            enemyRb.linearVelocity = Vector3.zero;
+        }
     }
 }
