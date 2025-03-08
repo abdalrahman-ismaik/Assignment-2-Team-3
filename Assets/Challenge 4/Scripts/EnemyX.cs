@@ -26,7 +26,7 @@ public class EnemyX : MonoBehaviour
         enemyRb.AddForce(lookDirection * speed * Time.deltaTime);
 
         // Restrict the position of the enemy
-        RestrictPosition();
+        
     }
 
     public void SetSpeed(float newSpeed)
