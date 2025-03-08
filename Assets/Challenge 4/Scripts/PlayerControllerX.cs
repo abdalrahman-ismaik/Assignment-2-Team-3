@@ -16,10 +16,13 @@ public class PlayerControllerX : MonoBehaviour
     private float powerupStrength = 25; // how hard to hit enemy with powerup
     public ParticleSystem speedBoostParticle;
 
+    private ScoreManager scoreManager;  // Reference to the ScoreManager
+
     void Start()
     {
         playerRb = GetComponent<Rigidbody>();
         focalPoint = GameObject.Find("Focal Point");
+        scoreManager = GameObject.Find("ScoreManager").GetComponent<ScoreManager>(); // Make sure the ScoreManager is in the scene
     }
 
     void Update()
@@ -78,8 +81,12 @@ public class PlayerControllerX : MonoBehaviour
 
 
         }
+
+        // If player collides with enemy goal, increase player score
+        if (other.gameObject.name == "Enemy Goal")
+        {
+            scoreManager.IncreasePlayerScore();
+        }
     }
-
-
 
 }
