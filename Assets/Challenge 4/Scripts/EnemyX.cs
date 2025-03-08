@@ -1,18 +1,21 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class EnemyX : MonoBehaviour
 {
     private float speed;
     private Rigidbody enemyRb;
     private GameObject playerGoal;
+    private ScoreManager scoreManager;  // Reference to the ScoreManager
 
     // Start is called before the first frame update
     void Start()
     {
         enemyRb = GetComponent<Rigidbody>();
         playerGoal = GameObject.Find("Player Goal");
+        scoreManager = GameObject.Find("ScoreManager").GetComponent<ScoreManager>(); // Make sure the ScoreManager is in the scene
     }
 
     // Update is called once per frame
@@ -32,12 +35,16 @@ public class EnemyX : MonoBehaviour
     private void OnCollisionEnter(Collision other)
     {
         // If enemy collides with either goal, destroy it
+        // If enemy collides with Enemy Goal, increase player score
         if (other.gameObject.name == "Enemy Goal")
         {
+            scoreManager.IncreasePlayerScore();
             Destroy(gameObject);
-        } 
+        }
+        // If enemy collides with Player Goal, increase enemy score
         else if (other.gameObject.name == "Player Goal")
         {
+            scoreManager.IncreaseEnemyScore();
             Destroy(gameObject);
         }
 
