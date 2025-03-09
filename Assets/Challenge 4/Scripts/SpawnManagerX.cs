@@ -49,8 +49,11 @@ public class SpawnManagerX : MonoBehaviour
             Instantiate(powerupPrefab, GenerateSpawnPosition() + powerupSpawnOffset, powerupPrefab.transform.rotation);
         }
 
-        // Spawn the ground slam powerup if none exists.
-        if (GameObject.FindGameObjectsWithTag("GroundSlamPowerup").Length == 0)
+        // Get the player's controller component to check if they already have the ground slam powerup.
+        PlayerControllerX playerController = player.GetComponent<PlayerControllerX>();
+
+        // Spawn the ground slam powerup if none exists and the player hasn't picked it up.
+        if (GameObject.FindGameObjectsWithTag("GroundSlamPowerup").Length == 0 && !playerController.hasGroundSlamPowerup)
         {
             Instantiate(groundSlamPowerupPrefab, GenerateSpawnPosition() + powerupSpawnOffset, groundSlamPowerupPrefab.transform.rotation);
         }
