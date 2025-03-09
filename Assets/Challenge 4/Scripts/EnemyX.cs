@@ -8,7 +8,7 @@ public class EnemyX : MonoBehaviour
     private float speed;
     private Rigidbody enemyRb;
     private GameObject playerGoal;
-    private ScoreManager scoreManager;  // Reference to the ScoreManager
+    public ScoreManager scoreManager;  // Reference to the ScoreManager
 
     // Start is called before the first frame update
     void Start()

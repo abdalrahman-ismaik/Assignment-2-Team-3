@@ -22,8 +22,6 @@ public class SpawnManagerX : MonoBehaviour
     public GameObject player;
     public ScoreManager scoreManager;
 
-    private bool gameOver = false; //added to prevent extra waves
-
     void Start()
     {
         scoreManager = GameObject.Find("ScoreManager").GetComponent<ScoreManager>();
@@ -32,20 +30,11 @@ public class SpawnManagerX : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (gameOver)
-        {
-            return;
-        }
         enemyCount = GameObject.FindGameObjectsWithTag("Enemy").Length;
 
-        //if the number of waves is less than 5, then continue to spawn
-        if (enemyCount == 0 && waveCount <= maxWaves)
+        if (enemyCount == 0)
         {
             SpawnEnemyWave(waveCount);
-        }
-        else if (waveCount > maxWaves)
-        {
-            CheckWinCondition();
         }
     }
 
@@ -59,11 +48,6 @@ public class SpawnManagerX : MonoBehaviour
 
     void SpawnEnemyWave(int enemiesToSpawn)
     {
-        if (gameOver) return;
-
-        //Stop spawning if max waves reached
-
-
         Vector3 powerupSpawnOffset = new Vector3(0, 0, -15); // make powerups spawn at player end
 
         // Spawn the existing regular powerup if none exists.
@@ -99,26 +83,5 @@ public class SpawnManagerX : MonoBehaviour
         player.transform.position = new Vector3(0, 1, -2);
         player.GetComponent<Rigidbody>().linearVelocity = Vector3.zero;
         player.GetComponent<Rigidbody>().angularVelocity = Vector3.zero;
-    }
-
-    public void CheckWinCondition()
-    {
-        if (scoreManager.playerScore >= 5)
-        {
-            Debug.Log("Player Wins! 🎉");
-            EndGame();
-            // Load win scene or show message
-        }
-        else if (scoreManager.enemyScore >= 5)
-        {
-            Debug.Log("Game Over! Enemy Wins 💀");
-            EndGame();
-            // Load game over scene or show message
-        }
-    }
-
-    void EndGame()
-    {
-        gameOver = true; // 🔴 Stop spawning
     }
 }

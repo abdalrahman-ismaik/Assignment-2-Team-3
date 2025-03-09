@@ -14,12 +14,6 @@ public class AudioManager : MonoBehaviour
 
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
     // Method to play the player's goal sound (crowd clapping)
     public void PlayPlayerScoreSound()
     {

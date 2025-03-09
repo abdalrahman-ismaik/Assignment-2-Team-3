@@ -7,6 +7,7 @@ public class ScoreManager : MonoBehaviour
 
     public AudioManager audioManager;
     public SpawnManagerX spawnManager; // Reference to SpawnManager
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -24,7 +25,6 @@ public class ScoreManager : MonoBehaviour
     {
         playerScore++;
         audioManager.PlayPlayerScoreSound();
-        CheckGameOver(); //Check if the game should end
     }
 
     // Method to increase enemy score
@@ -32,14 +32,6 @@ public class ScoreManager : MonoBehaviour
     {
         enemyScore++;
         audioManager.PlayEnemyScoreSound();
-        CheckGameOver(); //Check if the game should end
-    }
-    void CheckGameOver()
-    {
-        if (playerScore >= 5 || enemyScore >= 5)
-        {
-            spawnManager.CheckWinCondition(); // Call the win condition
-        }
     }
 }
 
