@@ -39,6 +39,4 @@ public class AudioManager : MonoBehaviour
     {
         audioSource.volume = Mathf.Clamp01(volume); // Ensure volume is between 0 and 1
     }
-
-
 }

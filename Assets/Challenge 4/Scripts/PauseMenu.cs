@@ -1,4 +1,7 @@
 using UnityEngine;
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
 
 public class PauseMenu : MonoBehaviour
 {
@@ -37,7 +40,11 @@ public class PauseMenu : MonoBehaviour
 
     public void QuitGame()
     {
+        #if UNITY_EDITOR
+        EditorApplication.isPlaying = false;
+        #else
         Application.Quit();
+        #endif
     }
 
     public void LoadMenu()
