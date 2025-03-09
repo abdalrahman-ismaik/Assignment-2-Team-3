@@ -23,12 +23,15 @@ public class PlayerControllerX : MonoBehaviour
     public float shockwaveForce = 50f;          // Maximum force applied to an enemy in the shockwave
 
     private ScoreManager scoreManager;  // Reference to the ScoreManager
+    private SpawnManagerX spawnManager;  // Reference to the ScoreManager
+
 
     void Start()
     {
         playerRb = GetComponent<Rigidbody>();
         focalPoint = GameObject.Find("Focal Point");
         scoreManager = GameObject.Find("ScoreManager").GetComponent<ScoreManager>(); // Ensure ScoreManager exists in scene
+        spawnManager = GameObject.Find("Spawn Manager").GetComponent<SpawnManagerX>(); // Ensure SpawnManager exists in scene
     }
 
     void Update()
@@ -65,6 +68,11 @@ public class PlayerControllerX : MonoBehaviour
             playerRb.AddForce(Vector3.up * groundSlamUpForce, ForceMode.Impulse);
             
             powerupIndicator_slam.SetActive(false);
+        }
+
+        if(transform.position.y < -10)
+        {
+            spawnManager.ResetPlayerPosition();
         }
     }
 

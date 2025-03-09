@@ -94,7 +94,7 @@ public class SpawnManagerX : MonoBehaviour
     }
 
     // Move player back to starting position.
-    void ResetPlayerPosition()
+    public void ResetPlayerPosition()
     {
         player.transform.position = new Vector3(0, 1, -2);
         player.GetComponent<Rigidbody>().linearVelocity = Vector3.zero;
