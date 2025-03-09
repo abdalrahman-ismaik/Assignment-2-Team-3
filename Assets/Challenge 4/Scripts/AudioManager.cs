@@ -8,35 +8,51 @@ public class AudioManager : MonoBehaviour
     public AudioClip enemyScoreClip;
     public AudioClip MainMenuMusic;
 
-
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    void Awake()
     {
+        // Initialize audioSource in Awake instead of Start
         audioSource = GetComponent<AudioSource>();
-
     }
 
     // Method to play the player's goal sound (crowd clapping)
     public void PlayPlayerScoreSound()
     {
-        audioSource.PlayOneShot(playerScoreClip);  // Play the player score sound
+        if (audioSource == null)
+            audioSource = GetComponent<AudioSource>();
+            
+        if (audioSource != null && playerScoreClip != null)
+            audioSource.PlayOneShot(playerScoreClip);
     }
 
     // Method to play the enemy's goal sound (crowd "Awww")
     public void PlayEnemyScoreSound()
     {
-        audioSource.PlayOneShot(enemyScoreClip);  // Play the enemy score sound
+        if (audioSource == null)
+            audioSource = GetComponent<AudioSource>();
+            
+        if (audioSource != null && enemyScoreClip != null)
+            audioSource.PlayOneShot(enemyScoreClip);
     }
 
     public void PlayMainMenuMusic()
     {
-        audioSource.clip = MainMenuMusic;
-        audioSource.loop = true;
-        audioSource.Play();
+        if (audioSource == null)
+            audioSource = GetComponent<AudioSource>();
+            
+        if (audioSource != null && MainMenuMusic != null)
+        {
+            audioSource.clip = MainMenuMusic;
+            audioSource.loop = true;
+            audioSource.Play();
+        }
     }
 
     public void SetVolume(float volume)
     {
-        audioSource.volume = Mathf.Clamp01(volume); // Ensure volume is between 0 and 1
+        if (audioSource == null)
+            audioSource = GetComponent<AudioSource>();
+            
+        if (audioSource != null)
+            audioSource.volume = Mathf.Clamp01(volume);
     }
 }

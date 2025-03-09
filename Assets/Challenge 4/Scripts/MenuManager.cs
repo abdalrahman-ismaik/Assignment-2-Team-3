@@ -7,48 +7,115 @@ using UnityEditor;
 
 public class MenuManager : MonoBehaviour
 {
-    public static MenuManager Instance;
-
     // Stores difficulty level (-1 = Not selected, 0 = Easy, 1 = Medium, 2 = Hard)
     public static int level = -1; 
 
+    // Non-static references to UI elements
     [SerializeField] private Button playButton;
+    [SerializeField] private Button easyButton;
+    [SerializeField] private Button mediumButton;
+    [SerializeField] private Button hardButton;
+    [SerializeField] private Button quitButton;
     [SerializeField] private Slider volumeSlider;
-    public AudioManager audioManager;
+    [SerializeField] private AudioManager audioManager;
 
     void Awake()
     {
-        if (Instance == null)
+        // Initialize UI
+        InitializeUI();
+    }
+
+    private void InitializeUI()
+    {
+        // Find UI elements if not assigned in the inspector
+        if (playButton == null)
+            playButton = GameObject.Find("PlayButton")?.GetComponent<Button>();
+        
+        if (easyButton == null)
+            easyButton = GameObject.Find("EasyButton")?.GetComponent<Button>();
+        
+        if (mediumButton == null)
+            mediumButton = GameObject.Find("MediumButton")?.GetComponent<Button>();
+        
+        if (hardButton == null)
+            hardButton = GameObject.Find("HardButton")?.GetComponent<Button>();
+        
+        if (quitButton == null)
+            quitButton = GameObject.Find("QuitButton")?.GetComponent<Button>();
+        
+        if (volumeSlider == null)
+            volumeSlider = GameObject.Find("Slider")?.GetComponent<Slider>();
+        
+        if (audioManager == null)
+            audioManager = GameObject.Find("Audio Manager")?.GetComponent<AudioManager>();
+
+        // Set up button listeners
+        if (playButton != null)
         {
-            Instance = this;
-            DontDestroyOnLoad(gameObject);
+            playButton.onClick.RemoveAllListeners();
+            playButton.onClick.AddListener(StartGame);
+            playButton.interactable = level != -1;
         }
-        else
+
+        if (easyButton != null)
         {
-            Destroy(gameObject);
+            easyButton.onClick.RemoveAllListeners();
+            easyButton.onClick.AddListener(setEasy);
+        }
+
+        if (mediumButton != null)
+        {
+            mediumButton.onClick.RemoveAllListeners();
+            mediumButton.onClick.AddListener(setMedium);
+        }
+
+        if (hardButton != null)
+        {
+            hardButton.onClick.RemoveAllListeners();
+            hardButton.onClick.AddListener(setHard);
+        }
+
+        if (quitButton != null)
+        {
+            quitButton.onClick.RemoveAllListeners();
+            quitButton.onClick.AddListener(QuitGame);
+        }
+
+        if (volumeSlider != null)
+        {
+            volumeSlider.onValueChanged.RemoveAllListeners();
+            volumeSlider.onValueChanged.AddListener(delegate { SetVolume(); });
         }
     }
 
     void Start()
     {
-        // Assign UI elements
-        volumeSlider = GameObject.Find("Slider").GetComponent<Slider>();
-        audioManager = GameObject.Find("Audio Manager").GetComponent<AudioManager>();
-        audioManager.PlayMainMenuMusic();
-
-        playButton.interactable = false; // Disable Play button initially
+        // If level was set from a previous scene, make sure the UI reflects it
+        if (level != -1 && playButton != null)
+        {
+            playButton.interactable = true;
+        }
+        
+        // Play music after everything is initialized
+        if (audioManager != null)
+        {
+            audioManager.PlayMainMenuMusic();
+        }
     }
 
     // Set difficulty and unlock Play button
     public void SetDifficulty(int selectedLevel)
     {
         level = selectedLevel;
-        playButton.interactable = true; // Enable Play button
+        if (playButton != null)
+        {
+            playButton.interactable = true;
+        }
     }
 
     public void StartGame()
     {
-        if (level == -1) // Ensure difficulty is selected
+        if (level == -1)
         {
             Debug.Log("Please select a difficulty before starting the game.");
             return;
@@ -83,7 +150,10 @@ public class MenuManager : MonoBehaviour
 
     public void SetVolume()
     {
-        audioManager.SetVolume(volumeSlider.value);
+        if (audioManager != null && volumeSlider != null)
+        {
+            audioManager.SetVolume(volumeSlider.value);
+        }
     }
 
     public void setEasy()
