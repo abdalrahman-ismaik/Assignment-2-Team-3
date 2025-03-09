@@ -12,6 +12,7 @@ public class ScoreManager : MonoBehaviour
     void Start()
     {
         spawnManager = GameObject.Find("Spawn Manager").GetComponent<SpawnManagerX>();
+        audioManager = GameObject.Find("AudioManager").GetComponent<AudioManager>();
     }
 
     // Update is called once per frame
