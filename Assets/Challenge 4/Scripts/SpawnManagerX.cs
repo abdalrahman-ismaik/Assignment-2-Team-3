@@ -5,7 +5,8 @@ using UnityEngine;
 public class SpawnManagerX : MonoBehaviour
 {
     public GameObject enemyPrefab;
-    public GameObject powerupPrefab;
+    public GameObject powerupPrefab;             // Existing powerup prefab
+    public GameObject groundSlamPowerupPrefab;     // New ground slam powerup prefab
 
     private float spawnRangeX = 10;
     private float spawnZMin = 15; // set min spawn Z
@@ -28,29 +29,33 @@ public class SpawnManagerX : MonoBehaviour
         {
             SpawnEnemyWave(waveCount);
         }
-
     }
 
     // Generate random spawn position for powerups and enemy balls
-    Vector3 GenerateSpawnPosition ()
+    Vector3 GenerateSpawnPosition()
     {
         float xPos = Random.Range(-spawnRangeX, spawnRangeX);
         float zPos = Random.Range(spawnZMin, spawnZMax);
         return new Vector3(xPos, 0, zPos);
     }
 
-
     void SpawnEnemyWave(int enemiesToSpawn)
     {
         Vector3 powerupSpawnOffset = new Vector3(0, 0, -15); // make powerups spawn at player end
 
-        // If no powerups remain, spawn a powerup
-        if (GameObject.FindGameObjectsWithTag("Powerup").Length == 0) // check that there are zero powerups
+        // Spawn the existing regular powerup if none exists.
+        if (GameObject.FindGameObjectsWithTag("PowerUp").Length == 0)
         {
             Instantiate(powerupPrefab, GenerateSpawnPosition() + powerupSpawnOffset, powerupPrefab.transform.rotation);
         }
 
-        // Spawn number of enemy balls based on wave number
+        // Spawn the ground slam powerup if none exists.
+        if (GameObject.FindGameObjectsWithTag("GroundSlamPowerup").Length == 0)
+        {
+            Instantiate(groundSlamPowerupPrefab, GenerateSpawnPosition() + powerupSpawnOffset, groundSlamPowerupPrefab.transform.rotation);
+        }
+
+        // Spawn enemy balls based on the current wave number.
         for (int i = 0; i < waveCount; i++)
         {
             GameObject enemy = Instantiate(enemyPrefab, GenerateSpawnPosition(), enemyPrefab.transform.rotation);
@@ -59,17 +64,14 @@ public class SpawnManagerX : MonoBehaviour
 
         waveCount++;
         enemySpeed += speedIncrement;
-        ResetPlayerPosition(); // put player back at start
-
+        ResetPlayerPosition(); // Reset player position after wave spawn.
     }
 
-    // Move player back to position in front of own goal
-    void ResetPlayerPosition ()
+    // Move player back to starting position.
+    void ResetPlayerPosition()
     {
         player.transform.position = new Vector3(0, 1, -2);
         player.GetComponent<Rigidbody>().linearVelocity = Vector3.zero;
         player.GetComponent<Rigidbody>().angularVelocity = Vector3.zero;
-
     }
-
 }

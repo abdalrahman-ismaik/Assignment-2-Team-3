@@ -502,6 +502,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   enemyPrefab: {fileID: 8932280921958007952, guid: 47045ccb8f3944b9b8a55f6b07f0aefc, type: 3}
   powerupPrefab: {fileID: 4446131693967519089, guid: c5497424856514b2ba61b78375567988, type: 3}
+  groundSlamPowerupPrefab: {fileID: 4446131693967519089, guid: 2d7bb8c9d943ad9499ad706b54bb058a, type: 3}
   enemyCount: 0
   waveCount: 1
   enemySpeed: 10
@@ -1075,6 +1076,10 @@ MonoBehaviour:
   powerupIndicator: {fileID: 1427939658}
   powerUpDuration: 5
   speedBoostParticle: {fileID: 1930518439}
+  hasGroundSlamPowerup: 0
+  groundSlamUpForce: 9
+  shockwaveRadius: 20
+  shockwaveForce: 50
 --- !u!1 &680832294
 GameObject:
   m_ObjectHideFlags: 0
@@ -1556,7 +1561,7 @@ GameObject:
   - component: {fileID: 1055584950}
   m_Layer: 0
   m_Name: Ground
-  m_TagString: Untagged
+  m_TagString: Ground
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
