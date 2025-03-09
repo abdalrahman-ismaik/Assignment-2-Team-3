@@ -59,25 +59,30 @@ public class EnemyX : MonoBehaviour
 
     void RestrictPosition()
     {
-        if (transform.position.x < -18f)
+        Vector3 velocity = enemyRb.linearVelocity; // Get current velocity
+        float dampingFactor = 0.8f; // Adjust this to control energy loss (0.8 = 80% of original speed)
+
+        if (transform.position.x < -18.5f)
         {
             transform.position = new Vector3(-18f, transform.position.y, transform.position.z);
-            enemyRb.linearVelocity = Vector3.zero;
+            velocity.x = -velocity.x * dampingFactor; // Reverse and reduce velocity
         }
-        if (transform.position.x > 18f)
+        if (transform.position.x > 18.5f)
         {
             transform.position = new Vector3(18f, transform.position.y, transform.position.z);
-            enemyRb.linearVelocity = Vector3.zero;
+            velocity.x = -velocity.x * dampingFactor;
         }
-        if (transform.position.z < -9f)
+        if (transform.position.z < -9.5f)
         {
             transform.position = new Vector3(transform.position.x, transform.position.y, -9f);
-            enemyRb.linearVelocity = Vector3.zero;
+            velocity.z = -velocity.z * dampingFactor;
         }
-        if (transform.position.z > 29f)
+        if (transform.position.z > 29.5f)
         {
             transform.position = new Vector3(transform.position.x, transform.position.y, 29f);
-            enemyRb.linearVelocity = Vector3.zero;
+            velocity.z = -velocity.z * dampingFactor;
         }
+
+        enemyRb.linearVelocity = velocity; // Apply the modified velocity
     }
 }
