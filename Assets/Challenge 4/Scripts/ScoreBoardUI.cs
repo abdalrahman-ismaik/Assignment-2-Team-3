@@ -13,10 +13,10 @@ public class ScoreBoardUI : MonoBehaviour
         if (scoreManager != null && scoreTextPlayer != null && scoreTextEnemy != null)
         {
             // Update player score text
-            scoreTextPlayer.text = "Player: " + scoreManager.playerScore.ToString();
+            scoreTextPlayer.text = "Player  " + scoreManager.playerScore.ToString();
 
             // Update enemy score text
-            scoreTextEnemy.text = "Enemy: " + scoreManager.enemyScore.ToString();
+            scoreTextEnemy.text = scoreManager.enemyScore.ToString()+"  Enemy";
         }
         else
         {

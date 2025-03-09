@@ -129,6 +129,7 @@ public class PlayerControllerX : MonoBehaviour
         // When ground slamming and colliding with an object tagged "Ground", trigger the shockwave.
         if (isGroundSlamming && other.gameObject.CompareTag("Ground"))
         {
+
             // Optionally reset velocity to ensure a solid impact.
             playerRb.linearVelocity = Vector3.zero;
 
@@ -149,6 +150,7 @@ public class PlayerControllerX : MonoBehaviour
                     }
                 }
             }
+            speedBoostParticle.Play();
             // Reset the ground slam state.
             isGroundSlamming = false;
         }
