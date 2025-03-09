@@ -8,23 +8,28 @@ public class PlayerControllerX : MonoBehaviour
     private float speed = 500f;
     private GameObject focalPoint;
 
+    [Header("Regular Powerup Settings")]
     public bool hasPowerup;
     public GameObject powerupIndicator;
-    public GameObject powerupIndicator_slam; // Indicator for the ground slam powerup
     public int powerUpDuration = 7;
     private float normalStrength = 10f;   // How hard to hit enemy without powerup
     private float powerupStrength = 25f;   // How hard to hit enemy with powerup
     public ParticleSystem speedBoostParticle;
 
+    [Header("Ground Slam Powerup Settings")]
     public bool hasGroundSlamPowerup = false;  // Collected new ground slam powerup?
     private bool isGroundSlamming = false;      // Is the ground slam in progress?
+    public GameObject powerupIndicator_slam;    // Indicator for the ground slam powerup
     public float groundSlamUpForce = 5f;        // Upward force when activating ground slam
-    public float shockwaveRadius = 50f;           // Radius of the shockwave effect on landing
+    public float shockwaveRadius = 50f;         // Radius of the shockwave effect on landing
     public float shockwaveForce = 50f;          // Maximum force applied to an enemy in the shockwave
 
-    private ScoreManager scoreManager;  // Reference to the ScoreManager
-    private SpawnManagerX spawnManager;  // Reference to the ScoreManager
+    [Header("Slam Down Settings")]
+    public float slamDownForce = 20f;           // Downward force when second press is triggered
+    private bool hasSlamDownBeenTriggered = false;  // Ensures the slam-down is only triggered once
 
+    private ScoreManager scoreManager;  // Reference to the ScoreManager
+    private SpawnManagerX spawnManager;  // Reference to the SpawnManager
 
     void Start()
     {
@@ -36,21 +41,17 @@ public class PlayerControllerX : MonoBehaviour
 
     void Update()
     {
-        // Regular movement
+        // Regular movement.
         float verticalInput = Input.GetAxis("Vertical");
         playerRb.AddForce(focalPoint.transform.forward * verticalInput * speed * Time.deltaTime);
 
-        // Update the regular powerup indicator position (if active)
+        // Update regular powerup indicator position.
         if (powerupIndicator != null)
-        {
             powerupIndicator.transform.position = transform.position + new Vector3(0, -0.6f, 0);
-        }
         if (powerupIndicator_slam != null)
-        {
             powerupIndicator_slam.transform.position = transform.position + new Vector3(0, -0.6f, 0);
-        }
 
-        // Speed boost with Spacebar (existing functionality)
+        // Speed boost with Spacebar.
         if (Input.GetKeyDown(KeyCode.Space))
         {
             playerRb.AddForce(focalPoint.transform.forward * 10, ForceMode.Impulse);
@@ -58,48 +59,48 @@ public class PlayerControllerX : MonoBehaviour
         }
 
         // Ground Slam Activation:
-        // If player has collected the ground slam powerup and presses F, start the ground slam.
+        // First press: if player has the ground slam powerup and is not currently slamming, activate the ability.
         if (hasGroundSlamPowerup && !isGroundSlamming && Input.GetKeyDown(KeyCode.F))
         {
             isGroundSlamming = true;
-            // Consume the ground slam powerup.
-            hasGroundSlamPowerup = false;
+            hasGroundSlamPowerup = false; // Consume the powerup.
+            hasSlamDownBeenTriggered = false; // Reset the slam-down flag.
             // Launch the player upward.
             playerRb.AddForce(Vector3.up * groundSlamUpForce, ForceMode.Impulse);
-            
-            powerupIndicator_slam.SetActive(false);
+            if (powerupIndicator_slam != null)
+                powerupIndicator_slam.SetActive(false);
+        }
+        // Second press while in air: if already ground slamming and F is pressed again (and not already triggered), slam down quickly.
+        else if (isGroundSlamming && Input.GetKeyDown(KeyCode.F) && !hasSlamDownBeenTriggered)
+        {
+            playerRb.AddForce(Vector3.down * slamDownForce, ForceMode.Impulse);
+            hasSlamDownBeenTriggered = true;
         }
 
-        if(transform.position.y < -10)
-        {
+        // Reset player position if falling out of bounds.
+        if (transform.position.y < -10)
             spawnManager.ResetPlayerPosition();
-        }
     }
 
     // When player collides with powerups, store them.
     private void OnTriggerEnter(Collider other)
     {
-        // Regular powerup logic remains unchanged.
+        // Regular powerup logic.
         if (other.gameObject.CompareTag("PowerUp"))
         {
             Destroy(other.gameObject);
             hasPowerup = true;
             if (powerupIndicator != null)
-            {
                 powerupIndicator.SetActive(true);
-            }
             StartCoroutine(PowerupCooldown());
         }
-        // New ground slam powerup logic.
+        // Ground slam powerup logic.
         else if (other.gameObject.CompareTag("GroundSlamPowerup"))
         {
             Destroy(other.gameObject);
             hasGroundSlamPowerup = true;
-            // Optionally, you can also enable the same indicator or a separate one.
             if (powerupIndicator_slam != null)
-            {
                 powerupIndicator_slam.SetActive(true);
-            }
         }
     }
 
@@ -109,39 +110,35 @@ public class PlayerControllerX : MonoBehaviour
         yield return new WaitForSeconds(powerUpDuration);
         hasPowerup = false;
         if (powerupIndicator != null)
-        {
             powerupIndicator.SetActive(false);
-        }
     }
 
     // Handle collisions.
     private void OnCollisionEnter(Collision other)
     {
-        // Existing enemy collision logic.
+        // Enemy collision logic.
         if (other.gameObject.CompareTag("Enemy"))
         {
             Rigidbody enemyRigidbody = other.gameObject.GetComponent<Rigidbody>();
             Vector3 awayFromPlayer = other.gameObject.transform.position - transform.position;
-
-            if (hasPowerup) // Apply extra force if regular powerup is active.
-            {
+            if (hasPowerup)
                 enemyRigidbody.AddForce(awayFromPlayer * powerupStrength, ForceMode.Impulse);
-            }
-            else // Otherwise, apply normal force.
-            {
+            else
                 enemyRigidbody.AddForce(awayFromPlayer * normalStrength, ForceMode.Impulse);
-            }
         }
+
+        // Colliding with enemy goal increases player score.
+        if (other.gameObject.name == "Enemy Goal")
+            scoreManager.IncreasePlayerScore();
 
         // Ground slam shockwave logic:
         // When ground slamming and colliding with an object tagged "Ground", trigger the shockwave.
         if (isGroundSlamming && other.gameObject.CompareTag("Ground"))
         {
-
-            // Optionally reset velocity to ensure a solid impact.
+            // Reset velocity for a solid impact.
             playerRb.linearVelocity = Vector3.zero;
 
-            // Create a shockwave by checking for enemies within the shockwave radius.
+            // Create a shockwave by affecting all enemies within the shockwave radius.
             Collider[] colliders = Physics.OverlapSphere(transform.position, shockwaveRadius);
             foreach (Collider col in colliders)
             {
@@ -150,7 +147,6 @@ public class PlayerControllerX : MonoBehaviour
                     Rigidbody enemyRb = col.GetComponent<Rigidbody>();
                     if (enemyRb != null)
                     {
-                        // Calculate distance to enemy; closer enemies get a stronger push.
                         float distance = Vector3.Distance(transform.position, col.transform.position);
                         float multiplier = Mathf.Clamp01(1f - (distance / shockwaveRadius));
                         Vector3 pushDirection = (col.transform.position - transform.position).normalized;
@@ -159,7 +155,7 @@ public class PlayerControllerX : MonoBehaviour
                 }
             }
             speedBoostParticle.Play();
-            // Reset the ground slam state.
+            // Reset ground slam state.
             isGroundSlamming = false;
         }
     }
