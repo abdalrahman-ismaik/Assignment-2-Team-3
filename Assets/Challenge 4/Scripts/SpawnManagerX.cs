@@ -1,44 +1,67 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
 
 public class SpawnManagerX : MonoBehaviour
 {
     public GameObject enemyPrefab;
-    public GameObject powerupPrefab;             // Existing powerup prefab
-    public GameObject groundSlamPowerupPrefab;     // New ground slam powerup prefab
-
+    public GameObject powerupPrefab;
+    public GameObject groundSlamPowerupPrefab;
+    
     private float spawnRangeX = 10;
-    private float spawnZMin = 15; // set min spawn Z
-    private float spawnZMax = 25; // set max spawn Z
+    private float spawnZMin = 15;
+    private float spawnZMax = 25;
 
     public int enemyCount;
     public int waveCount = 1;
     public int maxWaves = 5;
 
-    public float enemySpeed = 250; // Initial enemy speed
-    private float speedIncrement = 20; // Speed increase per wave
+    public float enemySpeed = 250;
+    private float speedIncrement = 20;
+    private int baseEnemiesPerWave = 3;
+    
+    private bool gameOver = false;
 
+    public GameObject gameOverPanel;
+    public TextMeshProUGUI gameOverText;
+    public TextMeshProUGUI youWonText;
+    public TextMeshProUGUI finalScoreText;
+
+    private int winScore = 5;
     public GameObject player;
     public ScoreManager scoreManager;
 
     void Start()
     {
         scoreManager = GameObject.Find("ScoreManager").GetComponent<ScoreManager>();
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        enemyCount = GameObject.FindGameObjectsWithTag("Enemy").Length;
-
-        if (enemyCount == 0)
+        
+        if (MenuManager.level > 1) 
         {
-            SpawnEnemyWave(waveCount);
+            int difficultyFactor = MenuManager.level;
+            enemySpeed += speedIncrement * difficultyFactor;
         }
     }
 
-    // Generate random spawn position for powerups and enemy balls
+    void Update()
+    {
+        if (gameOver)
+        {
+            return;
+        }
+
+        enemyCount = GameObject.FindGameObjectsWithTag("Enemy").Length;
+
+        if (enemyCount == 0 && waveCount <= maxWaves)
+        {
+            SpawnEnemyWave(waveCount);
+        }
+        else if (waveCount > maxWaves)
+        {
+            CheckWinCondition();
+        }
+    }
+
     Vector3 GenerateSpawnPosition()
     {
         float xPos = Random.Range(-spawnRangeX, spawnRangeX);
@@ -46,27 +69,27 @@ public class SpawnManagerX : MonoBehaviour
         return new Vector3(xPos, 0, zPos);
     }
 
-    void SpawnEnemyWave(int enemiesToSpawn)
+    void SpawnEnemyWave(int waveMultiplier)
     {
-        Vector3 powerupSpawnOffset = new Vector3(0, 0, -15); // make powerups spawn at player end
+        if (gameOver) return;
 
-        // Spawn the existing regular powerup if none exists.
+        Vector3 powerupSpawnOffset = new Vector3(0, 0, -15);
+
         if (GameObject.FindGameObjectsWithTag("PowerUp").Length == 0)
         {
             Instantiate(powerupPrefab, GenerateSpawnPosition() + powerupSpawnOffset, powerupPrefab.transform.rotation);
         }
 
-        // Get the player's controller component to check if they already have the ground slam powerup.
         PlayerControllerX playerController = player.GetComponent<PlayerControllerX>();
 
-        // Spawn the ground slam powerup if none exists and the player hasn't picked it up.
         if (GameObject.FindGameObjectsWithTag("GroundSlamPowerup").Length == 0 && !playerController.hasGroundSlamPowerup)
         {
             Instantiate(groundSlamPowerupPrefab, GenerateSpawnPosition() + powerupSpawnOffset, groundSlamPowerupPrefab.transform.rotation);
         }
 
-        // Spawn enemy balls based on the current wave number.
-        for (int i = 0; i < waveCount; i++)
+        int enemiesToSpawn = baseEnemiesPerWave + waveMultiplier;
+
+        for (int i = 0; i < enemiesToSpawn; i++)
         {
             GameObject enemy = Instantiate(enemyPrefab, GenerateSpawnPosition(), enemyPrefab.transform.rotation);
             enemy.GetComponent<EnemyX>().SetSpeed(enemySpeed);
@@ -74,14 +97,46 @@ public class SpawnManagerX : MonoBehaviour
 
         waveCount++;
         enemySpeed += speedIncrement;
-        ResetPlayerPosition(); // Reset player position after wave spawn.
+        ResetPlayerPosition();
     }
 
-    // Move player back to starting position.
     public void ResetPlayerPosition()
     {
         player.transform.position = new Vector3(0, 1, -2);
         player.GetComponent<Rigidbody>().linearVelocity = Vector3.zero;
         player.GetComponent<Rigidbody>().angularVelocity = Vector3.zero;
+    }
+
+    public void CheckWinCondition()
+    {
+        if (scoreManager.playerScore >= winScore)
+        {
+            Debug.Log("Player Wins! 🎉");
+            EndGame();
+        }
+        else if (scoreManager.enemyScore >= winScore)
+        {
+            Debug.Log("Game Over! Enemy Wins 💀");
+            EndGame();
+        }
+    }
+
+    void EndGame()
+    {
+        gameOver = true;
+        Time.timeScale = 0;
+        gameOverPanel.SetActive(true);
+        finalScoreText.text = "Final Score: " + scoreManager.playerScore + " - " + scoreManager.enemyScore;
+
+        if (scoreManager.playerScore >= winScore)
+        {
+            youWonText.gameObject.SetActive(true);
+            gameOverText.gameObject.SetActive(false);
+        }
+        else
+        {
+            gameOverText.gameObject.SetActive(true);
+            youWonText.gameObject.SetActive(false);
+        }
     }
 }
