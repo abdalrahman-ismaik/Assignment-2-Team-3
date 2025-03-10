@@ -127,10 +127,6 @@ public class PlayerControllerX : MonoBehaviour
                 enemyRigidbody.AddForce(awayFromPlayer * normalStrength, ForceMode.Impulse);
         }
 
-        // Colliding with enemy goal increases player score.
-        if (other.gameObject.name == "Enemy Goal")
-            scoreManager.IncreasePlayerScore();
-
         // Ground slam shockwave logic:
         // When ground slamming and colliding with an object tagged "Ground", trigger the shockwave.
         if (isGroundSlamming && other.gameObject.CompareTag("Ground"))

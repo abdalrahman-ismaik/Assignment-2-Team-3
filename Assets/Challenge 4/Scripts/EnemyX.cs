@@ -36,7 +36,6 @@ public class EnemyX : MonoBehaviour
 
     private void OnCollisionEnter(Collision other)
     {
-        // If enemy collides with either goal, destroy it
         // If enemy collides with Enemy Goal, increase player score
         if (other.gameObject.name == "Enemy Goal")
         {

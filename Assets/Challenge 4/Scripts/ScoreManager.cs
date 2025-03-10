@@ -13,6 +13,7 @@ public class ScoreManager : MonoBehaviour
     {
         spawnManager = GameObject.Find("Spawn Manager").GetComponent<SpawnManagerX>();
         audioManager = GameObject.Find("AudioManager").GetComponent<AudioManager>();
+
     }
 
     // Update is called once per frame
@@ -26,6 +27,7 @@ public class ScoreManager : MonoBehaviour
     {
         playerScore++;
         audioManager.PlayPlayerScoreSound();
+        spawnManager.CheckWinCondition();
     }
 
     // Method to increase enemy score
@@ -33,6 +35,6 @@ public class ScoreManager : MonoBehaviour
     {
         enemyScore++;
         audioManager.PlayEnemyScoreSound();
+        spawnManager.CheckWinCondition();
     }
 }
-
