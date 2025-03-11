@@ -138,7 +138,14 @@ public class MenuManager : MonoBehaviour
                 break;
         }
     }
-
+    public void HowToPlay()
+    {
+        SceneManager.LoadScene("HowToPlay");
+    }
+    public void MainMenu()
+    {
+        SceneManager.LoadScene("Main Menu");
+    }
     public void QuitGame()
     {
         #if UNITY_EDITOR
