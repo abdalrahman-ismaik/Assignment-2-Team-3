@@ -31,7 +31,11 @@ public class ScoreManager : MonoBehaviour
     public void IncreasePlayerScore()
     {
         playerScore++;
+<<<<<<< Updated upstream
         audioManager?.PlayPlayerScoreSound(); // Use null conditional operator to avoid errors
+=======
+        audioManager.PlayPlayerScoreSound();
+>>>>>>> Stashed changes
         CheckWinCondition();
     }
 
