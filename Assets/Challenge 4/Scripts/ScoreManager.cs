@@ -35,6 +35,9 @@ public class ScoreManager : MonoBehaviour
         audioManager?.PlayPlayerScoreSound(); // Use null conditional operator to avoid errors
 =======
         audioManager.PlayPlayerScoreSound();
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
         CheckWinCondition();
     }
