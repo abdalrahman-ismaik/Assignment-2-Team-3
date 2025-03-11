@@ -18,8 +18,8 @@ public class SpawnManagerX : MonoBehaviour
     public int maxWaves = 5;
 
     public float enemySpeed = 250;
-    private float speedIncrement = 20;
-    private int baseEnemiesPerWave = 3;
+    private float speedIncrement = 100;
+    private int baseEnemiesPerWave = 1;
     
     private bool gameOver = false;
 

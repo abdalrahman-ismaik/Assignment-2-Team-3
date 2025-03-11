@@ -41,7 +41,7 @@ public class PlayerControllerX : MonoBehaviour
 
     void Update()
     {
-        // Regular movement.
+        // Get input
         float verticalInput = Input.GetAxis("Vertical");
         playerRb.AddForce(focalPoint.transform.forward * verticalInput * speed * Time.deltaTime);
 
@@ -160,3 +160,5 @@ public class PlayerControllerX : MonoBehaviour
         }
     }
 }
+
+
