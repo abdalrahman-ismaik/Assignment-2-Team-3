@@ -18,7 +18,7 @@ public class SpawnManagerX : MonoBehaviour
     public int maxWaves = 5;
 
     public float enemySpeed = 250;
-    private float speedIncrement = 100;
+    private float speedIncrement = 50;
     private int baseEnemiesPerWave = 1;
     
     private bool gameOver = false;
@@ -40,7 +40,7 @@ public class SpawnManagerX : MonoBehaviour
         {
             int difficultyFactor = MenuManager.level;
             enemySpeed += speedIncrement * difficultyFactor;
-            baseEnemiesPerWave += difficultyFactor * 2; // Increase starting enemies based on difficulty
+            baseEnemiesPerWave += difficultyFactor; // Increase starting enemies based on difficulty
         }
     }
 
@@ -142,11 +142,12 @@ public class SpawnManagerX : MonoBehaviour
         }
         // Delay before pausing time to let UI update
         StartCoroutine(PauseGameAfterDelay());
+        Time.timeScale = 1;
     }
 
     IEnumerator PauseGameAfterDelay()
     {
-        yield return new WaitForSeconds(0.1f); // Small delay to ensure UI updates
+        yield return new WaitForSeconds(1f); // Small delay to ensure UI updates
         Time.timeScale = 0;
     }
 }

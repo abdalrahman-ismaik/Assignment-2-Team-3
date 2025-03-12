@@ -57,7 +57,7 @@ public class ScoreManager : MonoBehaviour
 
     IEnumerator LoadSceneWithDelay(bool playerWon)
     {
-        yield return new WaitForSecondsRealtime(7f); // Use Realtime instead of normal seconds
+        yield return new WaitForSecondsRealtime(5f); // Use Realtime instead of normal seconds
 
         if (playerWon)
         {

@@ -986,16 +986,27 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5036a60f22d8542ca830e4578804462b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hasPowerup: 0
-  powerupIndicator: {fileID: 1427939658}
-  powerUpDuration: 5
+  baseSpeed: 1000
+  maxVelocity: 15
+  drag: 0.95
+  airControlMultiplier: 0.5
+  groundCheckDistance: 0.3
+  boostForce: 10
+  boostCooldown: 1
   speedBoostParticle: {fileID: 1930518439}
-  hasGroundSlamPowerup: 0
-  powerupIndicator_slam: {fileID: 2027308733}
+  normalStrength: 10
+  powerupStrength: 25
+  powerupDuration: 7
+  powerupIndicator: {fileID: 1427939658}
+  hasPowerup: 0
   groundSlamUpForce: 9
+  slamDownForce: 20
   shockwaveRadius: 20
   shockwaveForce: 50
-  slamDownForce: 20
+  slamCooldown: 0.5
+  powerupIndicator_slam: {fileID: 2027308733}
+  slamImpactParticle: {fileID: 19886120, guid: 5702e2a6fea804b45b49b70d8feaf7ae, type: 3}
+  hasGroundSlamPowerup: 0
 --- !u!1 &680832294
 GameObject:
   m_ObjectHideFlags: 0
