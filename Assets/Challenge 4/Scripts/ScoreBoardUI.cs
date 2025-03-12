@@ -7,6 +7,10 @@ public class ScoreBoardUI : MonoBehaviour
     public TextMeshProUGUI scoreTextEnemy;  // Reference to the TextMeshPro object that displays the enemy's score
     public ScoreManager scoreManager; // Reference to the ScoreManager that holds player and enemy scores
 
+    void Start()
+    {
+        scoreManager = GameObject.Find("ScoreManager").GetComponent<ScoreManager>();
+    }
     void Update()
     {
         // Check if the references are assigned

@@ -45,17 +45,19 @@ public class ScoreManager : MonoBehaviour
     {
         if (playerScore >= winningScore)
         {
+            spawnManager?.EndGame();  // Trigger game over UI
             StartCoroutine(LoadSceneWithDelay(true)); // Player wins, load next scene after delay
         }
         else if (enemyScore >= winningScore)
         {
+            spawnManager?.EndGame();  // Trigger game over UI
             StartCoroutine(LoadSceneWithDelay(false)); // Player loses, load main menu after delay
         }
     }
 
     IEnumerator LoadSceneWithDelay(bool playerWon)
     {
-        yield return new WaitForSeconds(7f); // Wait for 7 seconds
+        yield return new WaitForSecondsRealtime(7f); // Use Realtime instead of normal seconds
 
         if (playerWon)
         {
@@ -85,6 +87,9 @@ public class ScoreManager : MonoBehaviour
 
     void LoadMainMenu()
     {
+        // Reset time scale to ensure UI elements function properly
+        Time.timeScale = 1;
+
         // Ensure the "Main Menu" scene exists in the build settings
         if (SceneUtility.GetBuildIndexByScenePath("Main Menu") >= 0)
         {

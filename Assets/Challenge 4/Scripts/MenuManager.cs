@@ -138,7 +138,15 @@ public class MenuManager : MonoBehaviour
                 break;
         }
     }
-
+    public void HowToPlay()
+    {
+        SceneManager.LoadScene("HowToPlay");
+    }
+    public void MainMenu()
+    {
+        Time.timeScale = 1; // Reset time scale before switching scenes
+        SceneManager.LoadScene("Main Menu");
+    }
     public void QuitGame()
     {
         #if UNITY_EDITOR

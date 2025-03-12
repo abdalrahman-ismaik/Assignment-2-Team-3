@@ -20,6 +20,9 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Challenge 4/Level 3.unity
     guid: 812657512f02b1947810f5b3bfecf78f
+  - enabled: 1
+    path: Assets/Challenge 4/HowToPlay.unity
+    guid: 51285c4ee42850a4280e682d6755865e
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 052faaac586de48259a63d0c4782560b, type: 3}
   m_UseUCBPForAssetBundles: 0
