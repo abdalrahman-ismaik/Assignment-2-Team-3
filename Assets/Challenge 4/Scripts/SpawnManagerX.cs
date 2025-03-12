@@ -40,6 +40,7 @@ public class SpawnManagerX : MonoBehaviour
         {
             int difficultyFactor = MenuManager.level;
             enemySpeed += speedIncrement * difficultyFactor;
+            baseEnemiesPerWave += difficultyFactor * 2; // Increase starting enemies based on difficulty
         }
     }
 
@@ -54,7 +55,7 @@ public class SpawnManagerX : MonoBehaviour
 
         if (enemyCount == 0 && waveCount <= maxWaves)
         {
-            SpawnEnemyWave(waveCount);
+            SpawnEnemyWave(waveCount); // <- This calls the method when no enemies are left
         }
         else if (waveCount > maxWaves)
         {
@@ -121,10 +122,11 @@ public class SpawnManagerX : MonoBehaviour
         }
     }
 
-    void EndGame()
+    public void EndGame()
     {
+        if (gameOver) return;
+
         gameOver = true;
-        Time.timeScale = 0;
         gameOverPanel.SetActive(true);
         finalScoreText.text = "Final Score: " + scoreManager.playerScore + " - " + scoreManager.enemyScore;
 
@@ -138,5 +140,13 @@ public class SpawnManagerX : MonoBehaviour
             gameOverText.gameObject.SetActive(true);
             youWonText.gameObject.SetActive(false);
         }
+        // Delay before pausing time to let UI update
+        StartCoroutine(PauseGameAfterDelay());
+    }
+
+    IEnumerator PauseGameAfterDelay()
+    {
+        yield return new WaitForSeconds(0.1f); // Small delay to ensure UI updates
+        Time.timeScale = 0;
     }
 }
