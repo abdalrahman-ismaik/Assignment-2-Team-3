@@ -3,7 +3,7 @@
 This project is a Unity-based soccer-style game developed as part of COSC 495 - Unity Game Development. The game includes multiple enhancements such as optimized enemy behavior, improved UI, a scoring system, power-ups, and audio effects to create an engaging gameplay experience.
 ## Team Members & Roles
 - Abd Alrahman Ismaik (Project Lead, UI/UX, Gameplay Programming, Bug Fixes)
-- Tehsin Shaik (Audio Management, UI/UX, Game Mechanics, Bug Fixes)
+- Tehsin Shaik (Audio Management, UI/UX, Level Scenes, Game Mechanics, Bug Fixes)
 - Faisal Alzarooni (Level Design, UI/UX, Game World & Scene Implementation, Bug Fixes)
 
 ## Repository Structure & Branching Strategy
